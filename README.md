@@ -1,2 +1,3 @@
 # BASTILLE-Outlier-Detection
-Embedding-Based Auto Semisupervised Outlier Ensemble Framework 
+An Embedding-Based Auto Semisupervised Outlier Ensemble Framework for Malicious Logins Detection
+ 
