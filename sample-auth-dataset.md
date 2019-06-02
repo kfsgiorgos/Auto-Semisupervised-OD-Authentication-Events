@@ -11,4 +11,6 @@ We extract all the events of the above users on the command line by running the 
 
 awk -F, '$2==U228@DOM1 {print $1,$2,$3,$4,$5,$6,$7,$8,$9}' auth.txt > give_a_name.txt
 
-We employ tha above for each selected user 
+We employ tha above for each selected user
+
+- Also, we have to dowmload the redteam.txt.gz, which included the ground truth, from https://csr.lanl.gov/data/cyber1/ 
