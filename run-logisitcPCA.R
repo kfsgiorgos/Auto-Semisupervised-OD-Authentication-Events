@@ -10,7 +10,7 @@ SubsetColsRows[, names(SubsetColsRows)[c(1:10)]:= lapply(.SD,
 # Do one-hot-encoding
 system.time(DT_Onehot <- one_hot(SubsetColsRows))
 ## Check if we have 0 or 1 in some columns for all rows in order to exclude those columns
-temp <- transpose(DT_Onehot[, lapply(.SD, sum), .SDcols = names(DT_Onehot)])
+temp <- data.table::transpose(DT_Onehot[, lapply(.SD, sum), .SDcols = names(DT_Onehot)])
 temp[, colNames:= names(DT_Onehot[, lapply(.SD, sum), 
 	.SDcols = names(DT_Onehot)])]
 temp[V1 == 0 | V1 == dim(temp)[1]]
