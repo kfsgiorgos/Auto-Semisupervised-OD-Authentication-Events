@@ -39,7 +39,8 @@ def OCSVM_train_test_AllSubspaces(My_Nu, My_Gamma, My_Kernel, given_Encoded_data
    end1 = time.time()
    print((end1 - start1)/60.)
    y_pred_test = pd.DataFrame(clf1.decision_function(X_test))
-   stringtosave1 = "/home/giorgosk/Videos/R-Classification-LosAlamos/Latest_directory/OCSVM_results_scripts/Results_by_AllSubspaces/XtestOCSVM_ALLSubspaces_"
+   
+   stringtosave1 = # your_path
    stringtosave2 = str(My_Nu)
    stringtosave3 = str(My_Kernel)
    stringtosave4 = str(My_Gamma)
@@ -72,7 +73,7 @@ def OCSVM_train_test_900PCs(My_Nu, My_Gamma, My_Kernel, Association_string, Numb
    end1 = time.time()
    print((end1 - start1)/60.)
    y_pred_test = pd.DataFrame(clf1.decision_function(X_test))
-   stringtosave1 = "/home/giorgosk/Videos/R-Classification-LosAlamos/Latest_directory/OCSVM_results_scripts/Results_by_900PCs/XtestOCSVM_900PCs_"
+   stringtosave1 = # your_path
    stringtosave2 = str(My_Nu)
    stringtosave3 = str(My_Kernel)
    stringtosave4 = str(My_Gamma)

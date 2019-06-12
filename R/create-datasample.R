@@ -15,13 +15,15 @@ options(scipen = 9999)
 redTeam <- fread("redteam.txt")
 redTeamUnique <- unique(redTeam)
 redTeamUnique[, V5 := lubridate::as_datetime(V1)]
-setnames(redTeamUnique, c("V1", "V2", "V3", "V4", "V5"), c("TimeInSeconds", "Source_User","Source_Comp", 
-	"Destination_Comp", "Time"))
+setnames(redTeamUnique, c("V1", "V2", "V3", "V4", "V5"),
+         c("TimeInSeconds", "Source_User","Source_Comp", 
+           "Destination_Comp", "Time"))
 redTeamUnique[, Label := "Malicious"]
 
 # Read the datasets we have already created for each user
 # ----- Normal Users -----
 U22 <- fread("user22.txt", nThread = 40)
+# reduce the number of rows for each User
 U22 <- U22[V1 < 2600000]
 
 Anonymous<- fread("ANONYMOUS_LOGON_C586.txt", nThread = 40)
@@ -72,10 +74,11 @@ data.table::setnames(AllUsers, names(AllUsers),
 
 AllUsers[, Time := lubridate::as_datetime(TimeInSeconds)]
 AllUsers[, dayTime := day(Time)]
-# order by Time both datasets
+# order dataset by Time both 
 setkey(AllUsers, TimeInSeconds, Source_User, Source_Comp, Destination_Comp)
 setkey(redTeamUnique, TimeInSeconds, Source_User, Source_Comp, Destination_Comp)
-# join using the merge function to label the resuted dataset
+
+# join by merging to label the resulted dataset
 ResultMerge <- merge(AllUsers, redTeamUnique, all.x=TRUE)
 
 
@@ -86,13 +89,17 @@ redTeamUnique[Source_User %in% MalUsers]
 UU <- merge(redTeamUnique[Source_User %in% MalUsers], ResultMerge[Label == "Malicious"], all.x = T)
 UU[is.na(Label.y)]
 ## Those are missing as Malicious
+
 ResultMerge[TimeInSeconds %in% c(752613, 758915) & Source_User == "U737@DOM1" & Source_Comp == "C17693"]
+
 ### Fix it
 ResultMerge[TimeInSeconds %in% c(752613, 758915) & Source_User == "U737@DOM1" & 
 	    Source_Comp == "C17693", Label:= "Malicious"]
+
 ### Check again if everything is Correct
 dim(ResultMerge[Label == "Malicious"])
 dim(redTeamUnique[Source_User %in% MalUsers])
+
 ###  check if MERGE is correct
 ResultMerge[is.na(Label), Label:= "Normal"]
 ResultMerge[, Time.y:=NULL]
@@ -109,4 +116,5 @@ ResultMerge[Source_User == Destination_User, SuspiciousAuth:= 0L]
 
 ResultMerge[, names(ResultMerge)[c(2:9, 11, 13:14)]:= 
 	    lapply(.SD, function(x) as.numeric(as.factor(x)) ), .SDcols = c(2:9, 11, 13:14)]
+
 fwrite(ResultMerge, "ResultAllUsers.csv", nThread = 40)
